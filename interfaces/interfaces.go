@@ -13,4 +13,5 @@ type IUserRole interface {
 	AssociateRole(string,string)  (*mongo.UpdateResult,error)
 	Remove(string,string)  (*mongo.UpdateResult,error)
 	AppendArray(string,[]string) (*mongo.UpdateResult,error)
+	ListFeatures(string)(error)
 }

@@ -146,5 +146,17 @@ func main() {
 		}
 		c.JSON(http.StatusOK, gin.H{"value": response})
 	})
+
+	r.POST("listrole/:role",func (c *gin.Context)  {
+		role:=c.Param("role")
+		response,err:=client.ListFeatures(context.Background(),&cus.Role{
+			Role: role,
+		})
+		if err!=nil{
+			c.JSON(http.StatusInternalServerError,gin.H{"error":err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{"value": response})
+	})
 	r.Run(":8080")
 }

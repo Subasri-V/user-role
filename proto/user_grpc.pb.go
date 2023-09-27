@@ -26,6 +26,7 @@ const (
 	UserRoleService_AssociateRole_FullMethodName = "/proto.UserRoleService/AssociateRole"
 	UserRoleService_Remove_FullMethodName        = "/proto.UserRoleService/Remove"
 	UserRoleService_AppendArray_FullMethodName   = "/proto.UserRoleService/AppendArray"
+	UserRoleService_ListFeatures_FullMethodName  = "/proto.UserRoleService/ListFeatures"
 )
 
 // UserRoleServiceClient is the client API for UserRoleService service.
@@ -39,6 +40,7 @@ type UserRoleServiceClient interface {
 	AssociateRole(ctx context.Context, in *AssociateRoleRequest, opts ...grpc.CallOption) (*AssociateRoleResponse, error)
 	Remove(ctx context.Context, in *AssociateRoleRequest, opts ...grpc.CallOption) (*AssociateRoleResponse, error)
 	AppendArray(ctx context.Context, in *UpdateRoleRequest, opts ...grpc.CallOption) (*AssociateRoleResponse, error)
+	ListFeatures(ctx context.Context, in *Role, opts ...grpc.CallOption) (*UserResponse, error)
 }
 
 type userRoleServiceClient struct {
@@ -112,6 +114,15 @@ func (c *userRoleServiceClient) AppendArray(ctx context.Context, in *UpdateRoleR
 	return out, nil
 }
 
+func (c *userRoleServiceClient) ListFeatures(ctx context.Context, in *Role, opts ...grpc.CallOption) (*UserResponse, error) {
+	out := new(UserResponse)
+	err := c.cc.Invoke(ctx, UserRoleService_ListFeatures_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserRoleServiceServer is the server API for UserRoleService service.
 // All implementations must embed UnimplementedUserRoleServiceServer
 // for forward compatibility
@@ -123,6 +134,7 @@ type UserRoleServiceServer interface {
 	AssociateRole(context.Context, *AssociateRoleRequest) (*AssociateRoleResponse, error)
 	Remove(context.Context, *AssociateRoleRequest) (*AssociateRoleResponse, error)
 	AppendArray(context.Context, *UpdateRoleRequest) (*AssociateRoleResponse, error)
+	ListFeatures(context.Context, *Role) (*UserResponse, error)
 	mustEmbedUnimplementedUserRoleServiceServer()
 }
 
@@ -150,6 +162,9 @@ func (UnimplementedUserRoleServiceServer) Remove(context.Context, *AssociateRole
 }
 func (UnimplementedUserRoleServiceServer) AppendArray(context.Context, *UpdateRoleRequest) (*AssociateRoleResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AppendArray not implemented")
+}
+func (UnimplementedUserRoleServiceServer) ListFeatures(context.Context, *Role) (*UserResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListFeatures not implemented")
 }
 func (UnimplementedUserRoleServiceServer) mustEmbedUnimplementedUserRoleServiceServer() {}
 
@@ -290,6 +305,24 @@ func _UserRoleService_AppendArray_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserRoleService_ListFeatures_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Role)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserRoleServiceServer).ListFeatures(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserRoleService_ListFeatures_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserRoleServiceServer).ListFeatures(ctx, req.(*Role))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // UserRoleService_ServiceDesc is the grpc.ServiceDesc for UserRoleService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -324,6 +357,10 @@ var UserRoleService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AppendArray",
 			Handler:    _UserRoleService_AppendArray_Handler,
+		},
+		{
+			MethodName: "ListFeatures",
+			Handler:    _UserRoleService_ListFeatures_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

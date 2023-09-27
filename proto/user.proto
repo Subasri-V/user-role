@@ -12,6 +12,7 @@ service UserRoleService {
     rpc AssociateRole(AssociateRoleRequest) returns (AssociateRoleResponse);
     rpc Remove(AssociateRoleRequest) returns (AssociateRoleResponse);
     rpc AppendArray(UpdateRoleRequest) returns(AssociateRoleResponse) ;
+    rpc ListFeatures(Role) returns (UserResponse);
 }
 
 message UserRequest {
@@ -29,6 +30,10 @@ message UserResponse {
 
 message Name {
     string Name = 1;
+}
+
+message Role {
+    string Role = 1;
 }
 
 message EnableResponse {

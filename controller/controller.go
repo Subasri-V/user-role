@@ -108,4 +108,15 @@ func (s *RPCServer) AppendArray(ctx context.Context,req *cus.UpdateRoleRequest) 
 	}
 }
 
+func (s *RPCServer) ListFeatures(ctx context.Context, req *cus.Role)(*cus.UserResponse,error){
+	err:=UserRoleDetails.ListFeatures(req.Role)
+	if err!=nil{
+		return nil,err 
+	}else{
+		Update:=cus.UserResponse{
+			Message: "Listed Role Successfully",
+		}
+		return &Update,nil
+	}
+}
 
