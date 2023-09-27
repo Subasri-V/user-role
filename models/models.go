@@ -18,3 +18,14 @@ type DBResponse struct{
 	Status   string `json:"status" bson:"status"`
 }
 
+type Role struct{
+	Role string `json:"role" bson:"role"`
+	Access string `json:"access" bson:"access"`
+	Responsibility string `json:"responsibility" bson:"responsibility"`
+}
+
+type RDBResponse struct{
+	Role string `json:"role" bson:"role"`
+	Access string `json:"access" bson:"access"`
+	Responsibility string `json:"responsibility" bson:"responsibility"`
+}
