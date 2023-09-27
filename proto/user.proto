@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package="https://github.com/Subasri-V/user-role.git";
+
+service UserRoleService {
+    rpc AddUser(UserRequest) returns (UserResponse);
+    rpc EnableUser(Name) returns (EnableResponse);
+    rpc DisableUser(Name) returns (DisableResponse);
+    rpc UpdateRole(UpdateRoleRequest) returns (UpdateRoleResponse);
+    rpc AssociateRole(AssociateRoleRequest) returns (AssociateRoleResponse);
+    rpc Remove(AssociateRoleRequest) returns (AssociateRoleResponse);
+    rpc AppendArray(UpdateRoleRequest) returns(AssociateRoleResponse) ;
+}
+
+message UserRequest {
+    string Name = 1;
+    string Email=2;
+    string Password =3;
+    string DOB =4;
+    repeated string Role =5;
+    string Status =6;
+}
+
+message UserResponse {
+    string message =1;
+}
+
+message Name {
+    string Name = 1;
+}
+
+message EnableResponse {
+    string message =1;
+}
+
+message DisableResponse {
+    string message =1;
+}
+
+message UpdateRoleResponse {
+    string message=1;
+}
+
+message UpdateRoleRequest {
+    string Name = 1;
+    repeated string Role =2;
+}
+
+message AssociateRoleRequest {
+    string Name = 1;
+    string Role =2;
+}
+
+message AssociateRoleResponse {
+    string message=1;
+}
+
