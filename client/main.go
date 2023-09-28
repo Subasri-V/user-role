@@ -158,5 +158,22 @@ func main() {
 		}
 		c.JSON(http.StatusOK, gin.H{"value": response})
 	})
+
+	r.POST("postrole",func (c *gin.Context)  {
+		var request cus.Role
+		fmt.Println("client: 1")
+		if err := c.ShouldBindJSON(&request); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		response,err:=client.ListFeaturesInPostman(context.Background(),&request)
+		if err!=nil{
+			c.JSON(http.StatusInternalServerError,gin.H{"error":err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{"value": response})
+	})
+
+
 	r.Run(":8080")
 }

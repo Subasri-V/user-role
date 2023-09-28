@@ -19,14 +19,15 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	UserRoleService_AddUser_FullMethodName       = "/proto.UserRoleService/AddUser"
-	UserRoleService_EnableUser_FullMethodName    = "/proto.UserRoleService/EnableUser"
-	UserRoleService_DisableUser_FullMethodName   = "/proto.UserRoleService/DisableUser"
-	UserRoleService_UpdateRole_FullMethodName    = "/proto.UserRoleService/UpdateRole"
-	UserRoleService_AssociateRole_FullMethodName = "/proto.UserRoleService/AssociateRole"
-	UserRoleService_Remove_FullMethodName        = "/proto.UserRoleService/Remove"
-	UserRoleService_AppendArray_FullMethodName   = "/proto.UserRoleService/AppendArray"
-	UserRoleService_ListFeatures_FullMethodName  = "/proto.UserRoleService/ListFeatures"
+	UserRoleService_AddUser_FullMethodName               = "/proto.UserRoleService/AddUser"
+	UserRoleService_EnableUser_FullMethodName            = "/proto.UserRoleService/EnableUser"
+	UserRoleService_DisableUser_FullMethodName           = "/proto.UserRoleService/DisableUser"
+	UserRoleService_UpdateRole_FullMethodName            = "/proto.UserRoleService/UpdateRole"
+	UserRoleService_AssociateRole_FullMethodName         = "/proto.UserRoleService/AssociateRole"
+	UserRoleService_Remove_FullMethodName                = "/proto.UserRoleService/Remove"
+	UserRoleService_AppendArray_FullMethodName           = "/proto.UserRoleService/AppendArray"
+	UserRoleService_ListFeatures_FullMethodName          = "/proto.UserRoleService/ListFeatures"
+	UserRoleService_ListFeaturesInPostman_FullMethodName = "/proto.UserRoleService/ListFeaturesInPostman"
 )
 
 // UserRoleServiceClient is the client API for UserRoleService service.
@@ -40,7 +41,8 @@ type UserRoleServiceClient interface {
 	AssociateRole(ctx context.Context, in *AssociateRoleRequest, opts ...grpc.CallOption) (*AssociateRoleResponse, error)
 	Remove(ctx context.Context, in *AssociateRoleRequest, opts ...grpc.CallOption) (*AssociateRoleResponse, error)
 	AppendArray(ctx context.Context, in *UpdateRoleRequest, opts ...grpc.CallOption) (*AssociateRoleResponse, error)
-	ListFeatures(ctx context.Context, in *Role, opts ...grpc.CallOption) (*UserResponse, error)
+	ListFeatures(ctx context.Context, in *Role, opts ...grpc.CallOption) (*ListFeaturesResponse, error)
+	ListFeaturesInPostman(ctx context.Context, in *Role, opts ...grpc.CallOption) (*Postresponse, error)
 }
 
 type userRoleServiceClient struct {
@@ -114,9 +116,18 @@ func (c *userRoleServiceClient) AppendArray(ctx context.Context, in *UpdateRoleR
 	return out, nil
 }
 
-func (c *userRoleServiceClient) ListFeatures(ctx context.Context, in *Role, opts ...grpc.CallOption) (*UserResponse, error) {
-	out := new(UserResponse)
+func (c *userRoleServiceClient) ListFeatures(ctx context.Context, in *Role, opts ...grpc.CallOption) (*ListFeaturesResponse, error) {
+	out := new(ListFeaturesResponse)
 	err := c.cc.Invoke(ctx, UserRoleService_ListFeatures_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userRoleServiceClient) ListFeaturesInPostman(ctx context.Context, in *Role, opts ...grpc.CallOption) (*Postresponse, error) {
+	out := new(Postresponse)
+	err := c.cc.Invoke(ctx, UserRoleService_ListFeaturesInPostman_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -134,7 +145,8 @@ type UserRoleServiceServer interface {
 	AssociateRole(context.Context, *AssociateRoleRequest) (*AssociateRoleResponse, error)
 	Remove(context.Context, *AssociateRoleRequest) (*AssociateRoleResponse, error)
 	AppendArray(context.Context, *UpdateRoleRequest) (*AssociateRoleResponse, error)
-	ListFeatures(context.Context, *Role) (*UserResponse, error)
+	ListFeatures(context.Context, *Role) (*ListFeaturesResponse, error)
+	ListFeaturesInPostman(context.Context, *Role) (*Postresponse, error)
 	mustEmbedUnimplementedUserRoleServiceServer()
 }
 
@@ -163,8 +175,11 @@ func (UnimplementedUserRoleServiceServer) Remove(context.Context, *AssociateRole
 func (UnimplementedUserRoleServiceServer) AppendArray(context.Context, *UpdateRoleRequest) (*AssociateRoleResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AppendArray not implemented")
 }
-func (UnimplementedUserRoleServiceServer) ListFeatures(context.Context, *Role) (*UserResponse, error) {
+func (UnimplementedUserRoleServiceServer) ListFeatures(context.Context, *Role) (*ListFeaturesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListFeatures not implemented")
+}
+func (UnimplementedUserRoleServiceServer) ListFeaturesInPostman(context.Context, *Role) (*Postresponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListFeaturesInPostman not implemented")
 }
 func (UnimplementedUserRoleServiceServer) mustEmbedUnimplementedUserRoleServiceServer() {}
 
@@ -323,6 +338,24 @@ func _UserRoleService_ListFeatures_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserRoleService_ListFeaturesInPostman_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Role)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserRoleServiceServer).ListFeaturesInPostman(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserRoleService_ListFeaturesInPostman_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserRoleServiceServer).ListFeaturesInPostman(ctx, req.(*Role))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // UserRoleService_ServiceDesc is the grpc.ServiceDesc for UserRoleService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -361,6 +394,10 @@ var UserRoleService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListFeatures",
 			Handler:    _UserRoleService_ListFeatures_Handler,
+		},
+		{
+			MethodName: "ListFeaturesInPostman",
+			Handler:    _UserRoleService_ListFeaturesInPostman_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

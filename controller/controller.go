@@ -108,15 +108,37 @@ func (s *RPCServer) AppendArray(ctx context.Context,req *cus.UpdateRoleRequest) 
 	}
 }
 
-func (s *RPCServer) ListFeatures(ctx context.Context, req *cus.Role)(*cus.UserResponse,error){
+func (s *RPCServer) ListFeatures(ctx context.Context, req *cus.Role)(*cus.ListFeaturesResponse,error){
 	err:=UserRoleDetails.ListFeatures(req.Role)
 	if err!=nil{
 		return nil,err 
 	}else{
-		Update:=cus.UserResponse{
-			Message: "Listed Role Successfully",
+		Update:=cus.ListFeaturesResponse{
+			Message: "listed feature successfully",
 		}
 		return &Update,nil
 	}
 }
 
+func (s *RPCServer) ListFeaturesInPostman(ctx context.Context,req *cus.Role) (*cus.Postresponse,error){
+	fmt.Println("controller: 1")
+	
+	list:=&models.Role{
+		Role: req.Role,
+	}
+	fmt.Println("controller: 2")
+
+	result,err:=UserRoleDetails.ListFeaturesInPostman(list)
+	fmt.Println("controller: 3")
+
+	if err!=nil{
+		return nil,err 
+	}else{
+		Update:=cus.Postresponse{
+			Role:           result.Role,
+			Access:         result.Access,
+			Responsibility: result.Responsibility,
+		}
+		return &Update,nil
+	}
+}

@@ -12,7 +12,8 @@ service UserRoleService {
     rpc AssociateRole(AssociateRoleRequest) returns (AssociateRoleResponse);
     rpc Remove(AssociateRoleRequest) returns (AssociateRoleResponse);
     rpc AppendArray(UpdateRoleRequest) returns(AssociateRoleResponse) ;
-    rpc ListFeatures(Role) returns (UserResponse);
+    rpc ListFeatures(Role) returns (ListFeaturesResponse);
+    rpc ListFeaturesInPostman(Role) returns(Postresponse);
 }
 
 message UserRequest {
@@ -62,3 +63,12 @@ message AssociateRoleResponse {
     string message=1;
 }
 
+message ListFeaturesResponse {
+    string message=1;
+}
+
+message Postresponse {
+    string Role=1;
+    string Access = 2;
+    string Responsibility = 3;
+}

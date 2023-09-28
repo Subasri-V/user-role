@@ -184,7 +184,7 @@ func (c *UserRoleService) AppendArray(name string, roles []string) (*mongo.Updat
 	}
 }
 
-func (c *UserRoleService) ListFeatures(role string) error {
+func (c *UserRoleService) ListFeatures(role string) (error ){
 	iv := bson.M{"role": role}
 
 	// Find the document
@@ -205,4 +205,14 @@ func (c *UserRoleService) ListFeatures(role string) error {
 	}
 
 	return nil
+}
+
+func (c*UserRoleService) ListFeaturesInPostman(role *models.Role) (*models.Role,error){
+	filter := bson.D{{Key: "role", Value: role.Role}}
+	var result *models.Role
+	err := c.roleCollection.FindOne(c.ctx, filter).Decode(&result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
 }
